@@ -2,6 +2,22 @@
 #include <iostream>
 using namespace std;
 
+class Account;
+
+class AccountHandler {
+private:
+	Account* accounts[100];
+	static int accountNum;  // 계좌수
+public:
+	~AccountHandler();
+	int showMenu();
+	void openNewAccount();
+	void deposit();
+	void withdraw();
+	void showAccountInfo();
+
+};
+
 class Account {
 private:
 	int accountNumber;	// 계좌번호
@@ -12,42 +28,37 @@ public:
 	Account(const Account&);
 	~Account();
 	int getAccountNumber() const;
-	char* getName();
-	int getMoney();
+	char* getName() const;
+	int getMoney() const;
 	void deposit(int money);
 	void withdraw(int money);
 	void showAccountInfo() const;
 };
 
-int showMenu();
-void openNewAccount();
-void deposit();
-void withdraw();
-void showAccountInfo();
 
-Account* accounts[100];
-int accountNum = 0;  // 계좌수
 
 
 enum{OPEN_NEW_ACCOUNT=1, DEPOSIT, WITHDRAW, SHOW_ACCOUNT_INFO, EXIT };
+
 int main() {
+	AccountHandler* accountHandler = new AccountHandler();
 	int select;
 
 	while (true) {
-		select = showMenu();
+		select = accountHandler->showMenu();
 
 		switch (select){
 		case OPEN_NEW_ACCOUNT:	//계좌개설
-			openNewAccount();
+			accountHandler->openNewAccount();
 			break;
 		case DEPOSIT: //입금
-			deposit();
+			accountHandler->deposit();
 			break;
 		case WITHDRAW:	//출금
-			withdraw();
+			accountHandler->withdraw();
 			break;
 		case SHOW_ACCOUNT_INFO:	//계좌정보 전체 출력
-			showAccountInfo();
+			accountHandler->showAccountInfo();
 			break;
 		case EXIT:
 			return 0;
@@ -59,7 +70,7 @@ int main() {
 	return 0;
 }
 
-int showMenu() {
+int AccountHandler::showMenu() {
 	int select;
 
 	cout << " -----Menu-----\n";
@@ -93,15 +104,15 @@ Account::~Account()
 
 int Account::getAccountNumber() const
 {
-	return accountNum;
+	return accountNumber;
 }
 
-char* Account::getName()
+char* Account::getName() const
 {
 	return name;
 }
 
-int Account::getMoney()
+int Account::getMoney() const
 {
 	return money;
 }
@@ -123,7 +134,7 @@ void Account::showAccountInfo() const
 	cout << "잔액: " << money << endl;
 }
 
-void openNewAccount() {
+void AccountHandler::openNewAccount() {
 	int accountNumber; //계좌번호
 	cout << "[계좌개설]\n";
 	cout << "계좌ID: ";		cin >> accountNumber;
@@ -139,7 +150,7 @@ void openNewAccount() {
 	accounts[accountNum++] = new Account(accountNumber, name, money);
 }
 
-void deposit() {
+void AccountHandler::deposit() {
 	int account;
 	int money;
 	cout << "계좌ID: ";		cin >> account;
@@ -152,7 +163,7 @@ void deposit() {
 	cout << "입금완료\n\n";
 }
 
-void withdraw() {
+void AccountHandler::withdraw() {
 	int account;
 	int money;
 	cout << "계좌ID: ";		cin >> account;
@@ -170,10 +181,17 @@ void withdraw() {
 	cout << "출금완료\n" << '\n';
 }
 
-void showAccountInfo() {
+void AccountHandler::showAccountInfo() {
 	for (int i = 0; i < accountNum; i++) {
 		cout << "계좌ID: " << accounts[i]->getAccountNumber() << '\n';
 		cout << "이름 " << accounts[i]->getName() << '\n';
 		cout << "잔액: " << accounts[i]->getMoney() << '\n' << '\n';
 	}
+}
+
+
+int AccountHandler::accountNum = 0;
+
+AccountHandler::~AccountHandler() {
+	delete[] accounts;
 }
