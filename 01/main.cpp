@@ -9,6 +9,8 @@ private:
 	int money;
 public:
 	Account(int, const char*, int);
+	Account(const Account&);
+	~Account();
 	int getAccountNumber();
 	char* getName();
 	int getMoney();
@@ -71,11 +73,21 @@ int showMenu() {
 	return select;
 }
 
-Account::Account(int accountNumber, const char* name, int money) {
-	this->accountNumber = accountNumber;
+Account::Account(int accountNumber, const char* name, int money):accountNumber(accountNumber),money(money) {
 	this->name = new char[strlen(name) + 1];
 	strcpy(this->name, name);
-	this->money = money;
+}
+
+Account::Account(const Account& account):accountNumber(account.accountNumber),money(account.money)
+{
+	name = new char[strlen(account.name) + 1];
+	strcpy(name, account.name);
+
+}
+
+Account::~Account()
+{
+	delete[]name;
 }
 
 int Account::getAccountNumber()
