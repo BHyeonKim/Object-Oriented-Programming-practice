@@ -11,11 +11,12 @@ public:
 	Account(int, const char*, int);
 	Account(const Account&);
 	~Account();
-	int getAccountNumber();
+	int getAccountNumber() const;
 	char* getName();
 	int getMoney();
 	void deposit(int money);
 	void withdraw(int money);
+	void showAccountInfo() const;
 };
 
 int showMenu();
@@ -90,7 +91,7 @@ Account::~Account()
 	delete[]name;
 }
 
-int Account::getAccountNumber()
+int Account::getAccountNumber() const
 {
 	return accountNum;
 }
@@ -113,6 +114,13 @@ void Account::deposit(int money)
 void Account::withdraw(int money)
 {
 	this->money -= money;
+}
+
+void Account::showAccountInfo() const
+{
+	cout << "계좌ID: " << accountNumber << endl;
+	cout << "이름: " << name << endl;
+	cout << "잔액: " << money << endl;
 }
 
 void openNewAccount() {
