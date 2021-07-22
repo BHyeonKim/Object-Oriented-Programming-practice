@@ -3,6 +3,9 @@
 using namespace std;
 
 class Account;
+namespace CREDIT {
+	enum { A = 7, B = 4, C = 2 };
+}
 
 class AccountHandler {
 private:
@@ -12,10 +15,12 @@ public:
 	~AccountHandler();
 	int showMenu();
 	void openNewAccount();
+	void openNormalAccount();
+	void openHighCreditAccount();
 	void deposit();
 	void withdraw();
 	void showAccountInfo();
-
+	int selectAccountType();
 };
 
 class Account {
@@ -30,15 +35,33 @@ public:
 	int getAccountNumber() const;
 	char* getName() const;
 	int getMoney() const;
-	void deposit(int money);
+	virtual void deposit(int money);
 	void withdraw(int money);
 	void showAccountInfo() const;
 };
 
+class NormalAccount : public Account{//보통예금계좌
+private:
+	double interest_rate;
+public:
+	NormalAccount(int, const char*, int, double);
+	NormalAccount(const NormalAccount&);
+	virtual void deposit(int money);
+};
 
+class HighCreditAccount : public Account {//보통예금계좌
+private:
+	int credit;
+	double interest_rate;
+public:
+	HighCreditAccount(int, const char*, int, double, int);
+	HighCreditAccount(const HighCreditAccount&);
+	virtual void deposit(int money);
+};
 
 
 enum{OPEN_NEW_ACCOUNT=1, DEPOSIT, WITHDRAW, SHOW_ACCOUNT_INFO, EXIT };
+enum{NORMAL_ACCOUNT=1,HIGH_CREDIT_ACCOUNT};
 
 int main() {
 	AccountHandler* accountHandler = new AccountHandler();
@@ -135,19 +158,21 @@ void Account::showAccountInfo() const
 }
 
 void AccountHandler::openNewAccount() {
-	int accountNumber; //계좌번호
-	cout << "[계좌개설]\n";
-	cout << "계좌ID: ";		cin >> accountNumber;
+	int select = selectAccountType();
+	if (select == 0)
+		return;
+	switch (select){
+	case NORMAL_ACCOUNT:
+		openNormalAccount();
+		break;
+	case HIGH_CREDIT_ACCOUNT:
+		openHighCreditAccount();
+		break;
+	default:
+		cout << "ILLGAL SELECTION...\n";
+		break;
+	}
 
-
-	char name[20];
-	cout << "이름: ";		cin >> name;
-
-	int money;
-	cout << "입금액: ";		cin >> money;
-	cout << '\n';
-
-	accounts[accountNum++] = new Account(accountNumber, name, money);
 }
 
 void AccountHandler::deposit() {
@@ -194,4 +219,82 @@ int AccountHandler::accountNum = 0;
 
 AccountHandler::~AccountHandler() {
 	delete[] accounts;
+}
+
+NormalAccount::NormalAccount(int accountNumber, const char* name, int money, double interest_rate) :Account(accountNumber, name, money), interest_rate(interest_rate) {}
+NormalAccount::NormalAccount(const NormalAccount& normalAccount) : Account(normalAccount), interest_rate(normalAccount.interest_rate) {}
+void NormalAccount::deposit(int money) {
+	Account::deposit((int)(money + ((getMoney() + money) * interest_rate / 100)));
+}
+
+HighCreditAccount::HighCreditAccount(int accountNumber, const char* name, int money, double interest_rate, int credit) : Account(accountNumber, name, money), interest_rate(interest_rate), credit(credit) {}
+HighCreditAccount::HighCreditAccount(const HighCreditAccount& highCreditAccount) : Account(highCreditAccount), interest_rate(highCreditAccount.interest_rate), credit(highCreditAccount.credit) {}
+void HighCreditAccount::deposit(int money) {
+	int addional_interest=0;
+	switch (credit){
+	case 1:
+		addional_interest = CREDIT::A;
+		break;
+	case 2:
+		addional_interest = CREDIT::B;
+		break;
+	case 3:
+		addional_interest = CREDIT::C;
+		break;
+	default:
+		break;
+	}
+	Account::deposit((int)(money + ((getMoney() + money) * (interest_rate+addional_interest) / 100)));
+}
+
+
+int AccountHandler::selectAccountType() {
+	int select = 0;
+	cout << "[계좌종류선택]" << endl;
+	cout << "1.보통예금계좌 2.신용신뢰계좌" << endl;
+	cout << "선택: ";	cin >> select;
+	if (select == 1)
+		return 1;
+	if (select == 2)
+		return 2;
+	return 0;
+}
+
+void AccountHandler::openNormalAccount() {
+	int accountNumber; //계좌번호
+	cout << "[보통예금계좌 개설]\n";
+	cout << "계좌ID: ";		cin >> accountNumber;
+
+
+	char name[20];
+	cout << "이름: ";		cin >> name;
+
+	int money;
+	cout << "입금액: ";		cin >> money;
+
+	double interest_rate;
+	cout << "이자율: ";		cin >> interest_rate;
+
+	accounts[accountNum++] = new NormalAccount(accountNumber,name,money,interest_rate);
+}
+
+void AccountHandler::openHighCreditAccount() {
+	int accountNumber; //계좌번호
+	cout << "[신용신뢰계좌 개설]\n";
+	cout << "계좌ID: ";		cin >> accountNumber;
+
+
+	char name[20];
+	cout << "이름: ";		cin >> name;
+
+	int money;
+	cout << "입금액: ";		cin >> money;
+
+
+	double interest_rate;
+	cout << "이자율: ";		cin >> interest_rate;
+
+	int credit; // 신용등급
+	cout << "신용등급(1 to A, 2 to B, 3 to C):";		cin >> credit;
+	accounts[accountNum++] = new HighCreditAccount(accountNumber, name, money, interest_rate, credit);
 }
