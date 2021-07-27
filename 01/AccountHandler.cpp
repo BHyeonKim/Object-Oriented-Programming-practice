@@ -6,6 +6,12 @@
 
 int AccountHandler::accountNum = 0;
 
+
+AccountHandler::AccountHandler()
+{
+	accountNum = 0;
+}
+
 int AccountHandler::showMenu() {
 	int select;
 
@@ -45,8 +51,8 @@ void AccountHandler::deposit() {
 	cout << "입금액: ";		cin >> money;
 
 	for (int i = 0; i < accountNum; i++)
-		if (accounts[i]->getAccountNumber() == account)
-			accounts[i]->deposit(money);
+		if (accountArr[i]->getAccountNumber() == account)
+			accountArr[i]->deposit(money);
 
 	cout << "입금완료\n\n";
 }
@@ -58,8 +64,8 @@ void AccountHandler::withdraw() {
 	cout << "출금액: ";		cin >> money;
 
 	for (int i = 0; i < accountNum; i++)
-		if (accounts[i]->getAccountNumber() == account) {
-			if (accounts[i]->withdraw(money) == 0) {
+		if (accountArr[i]->getAccountNumber() == account) {
+			if (accountArr[i]->withdraw(money) == 0) {
 				cout << "잔액부족" << endl << endl;
 				return;
 			}
@@ -71,7 +77,7 @@ void AccountHandler::withdraw() {
 
 void AccountHandler::showAccountInfo() const{
 	for (int i = 0; i < accountNum; i++) {
-		accounts[i]->showAccountInfo();
+		accountArr[i]->showAccountInfo();
 		cout << endl;
 	}
 }
@@ -106,7 +112,7 @@ void AccountHandler::openNormalAccount() {
 	double interest_rate;
 	cout << "이자율: ";		cin >> interest_rate;
 
-	accounts[accountNum++] = new NormalAccount(accountNumber, name, money, interest_rate);
+	accountArr[accountNum] = new NormalAccount(accountNumber, name, money, interest_rate);
 }
 
 void AccountHandler::openHighCreditAccount() {
@@ -127,10 +133,10 @@ void AccountHandler::openHighCreditAccount() {
 
 	int credit; // 신용등급
 	cout << "신용등급(1 to A, 2 to B, 3 to C):";		cin >> credit;
-	accounts[accountNum++] = new HighCreditAccount(accountNumber, name, money, interest_rate, credit);
+	accountArr[accountNum++] = new HighCreditAccount(accountNumber, name, money, interest_rate, credit);
 }
 
 AccountHandler::~AccountHandler() {
 	for(int i=0; i < accountNum; i++)
-	delete accounts[i];
+	delete accountArr[i];
 }

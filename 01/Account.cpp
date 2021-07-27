@@ -13,6 +13,18 @@ Account::Account(const Account& account) : accountNumber(account.accountNumber),
 
 }
 
+Account& Account::operator=(const Account& account)
+{
+	// TODO: 여기에 return 문을 삽입합니다.
+	delete[] name;
+	name = new char[strlen(account.name) + 1];
+	strcpy(name, account.name);
+	accountNumber = account.accountNumber;
+	money = account.money;
+	
+	return *this;
+}
+
 
 int Account::getAccountNumber() const
 {

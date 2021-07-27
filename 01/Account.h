@@ -10,6 +10,7 @@ private:
 public:
 	Account(int, const char*, int);
 	Account(const Account&);
+	Account& operator=(const Account& account);
 
 	int getAccountNumber() const;
 	virtual void deposit(int money);

@@ -1,13 +1,15 @@
 #ifndef __ACCOUNT_HANDLER__
 #define __ACCOUNT_HANDLER__
 #include "Account.h"
+#include "BankingCommonDecl.h"
+#include "AccountArray.h"
 
 class AccountHandler {
 private:
-	Account* accounts[100];
+	BoundCheckAccountPtrArray accountArr;
 	static int accountNum;  // 계좌수
 public:
-	~AccountHandler();
+	AccountHandler();
 	int showMenu();
 	void openNewAccount();
 	void openNormalAccount();
@@ -16,5 +18,7 @@ public:
 	void withdraw();
 	void showAccountInfo() const;
 	int selectAccountType();
+	
+	~AccountHandler();
 };
 #endif __ACCOUNT_HANDLER__
