@@ -1,14 +1,14 @@
 #ifndef __ACCOUNT_H__
 #define __ACCOUNT_H__
-
+#include "String.h"
 
 class Account {
 private:
 	int accountNumber;	// 계좌번호
-	char* name;
+	String name;
 	int money;
 public:
-	Account(int, const char*, int);
+	Account(int, String, int);
 	Account(const Account&);
 	Account& operator=(const Account& account);
 

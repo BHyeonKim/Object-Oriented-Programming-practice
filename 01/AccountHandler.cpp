@@ -103,7 +103,7 @@ void AccountHandler::openNormalAccount() {
 	cout << "계좌ID: ";		cin >> accountNumber;
 
 
-	char name[20];
+	String name;
 	cout << "이름: ";		cin >> name;
 
 	int money;
@@ -121,7 +121,7 @@ void AccountHandler::openHighCreditAccount() {
 	cout << "계좌ID: ";		cin >> accountNumber;
 
 
-	char name[20];
+	String name;
 	cout << "이름: ";		cin >> name;
 
 	int money;

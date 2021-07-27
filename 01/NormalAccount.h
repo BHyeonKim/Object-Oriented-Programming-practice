@@ -6,7 +6,7 @@ class NormalAccount : public Account {//보통예금계좌
 private:
 	double interest_rate;
 public:
-	NormalAccount(int, const char*, int, double);
+	NormalAccount(int, String, int, double);
 	NormalAccount(const NormalAccount&);
 	virtual void deposit(int money);
 };

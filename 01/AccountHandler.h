@@ -3,6 +3,7 @@
 #include "Account.h"
 #include "BankingCommonDecl.h"
 #include "AccountArray.h"
+#include "String.h"
 
 class AccountHandler {
 private:
