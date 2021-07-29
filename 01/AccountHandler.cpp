@@ -4,12 +4,10 @@
 #include "NormalAccount.h"
 #include "HighCreditAccount.h"
 
-int AccountHandler::accountNum = 0;
 
 
-AccountHandler::AccountHandler()
+AccountHandler::AccountHandler():accountNum(0)
 {
-	accountNum = 0;
 }
 
 int AccountHandler::showMenu() {

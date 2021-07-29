@@ -2,13 +2,13 @@
 #define __ACCOUNT_HANDLER__
 #include "Account.h"
 #include "BankingCommonDecl.h"
-#include "AccountArray.h"
+#include "BoundCheckArray.h"
 #include "String.h"
 
 class AccountHandler {
 private:
-	BoundCheckAccountPtrArray accountArr;
-	static int accountNum;  // 계좌수
+	BoundCheckArray<Account*> accountArr;
+	int accountNum;  // 계좌수
 public:
 	AccountHandler();
 	int showMenu();
