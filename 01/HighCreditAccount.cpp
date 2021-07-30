@@ -1,9 +1,12 @@
 #include "BankingCommonDecl.h"
 #include "HighCreditAccount.h"
+#include "AccountException.h"
 
 HighCreditAccount::HighCreditAccount(int accountNumber, String name, int money, double interest_rate, int credit) : Account(accountNumber, name, money), interest_rate(interest_rate), credit(credit) {}
 HighCreditAccount::HighCreditAccount(const HighCreditAccount& highCreditAccount) : Account(highCreditAccount), interest_rate(highCreditAccount.interest_rate), credit(highCreditAccount.credit) {}
 void HighCreditAccount::deposit(int money) {
+	if (money < 0)
+		throw MinusException(money);
 	int addional_interest = 0;
 	switch (credit) {
 	case 1:

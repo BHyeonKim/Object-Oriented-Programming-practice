@@ -11,6 +11,7 @@ private:
 	BoundCheckArray(const BoundCheckArray& arr) {}
 	BoundCheckArray& operator=(const BoundCheckArray& arr) {}
 public:
+	BoundCheckArray(){}
 	BoundCheckArray(int length);
 	T& operator[](int index);
 	T operator[](int index) const;

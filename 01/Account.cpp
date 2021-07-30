@@ -1,5 +1,6 @@
 #include "BankingCommonDecl.h"
 #include "Account.h"
+#include "AccountException.h"
 
 Account::Account(int accountNumber, String name, int money) :accountNumber(accountNumber), money(money) {
 	//this->name = new char[strlen(name) + 1];
@@ -30,13 +31,19 @@ int Account::getAccountNumber() const
 
 void Account::deposit(int money)
 {
+	if (money < 0)
+		throw MinusException(money);
+
 	this->money += money;
 }
 
 int Account::withdraw(int money)
 {
+	if (money < 0)
+		throw MinusException(money);
+
 	if (this->money < money)
-		return 0;
+		throw InsuffException(this->money,money);
 	this->money -= money;
 	return money;
 	
